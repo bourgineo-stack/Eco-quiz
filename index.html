@@ -615,7 +615,7 @@
         </button>
         <div class="qr-code-popup" id="qr-popup">
             <div id="qr-code-header"></div>
-            <div class="qr-code-url">bourgineo-stack.github.io/quiz-kdm-participant/</div>
+            <div class="qr-code-url">bourgineo-stack.github.io/Eco-quiz-participant/</div>
         </div>
     </div>
     <div class="participants">👥 <span id="total-participants">0</span> participants <span style="font-size:0.65rem; opacity:0.4;">~30s</span></div>
@@ -717,7 +717,7 @@ const state = {
 
 // Génération QR code
 function generateQRCodes() {
-    const url = 'https://bourgineo-stack.github.io/quiz-kdm-participant/';
+    const url = 'https://bourgineo-stack.github.io/Eco-quiz-participant/';
     
     // QR dans l'écran de démarrage
     const qrStart = $('qr-code-start');
@@ -1537,7 +1537,7 @@ function showDiscussionPanel(quizState) {
     const qrDisc = document.getElementById('qr-discussion');
     if (qrDisc && qrDisc.innerHTML === '') {
         new QRCode(qrDisc, {
-            text: 'https://bourgineo-stack.github.io/quiz-kdm-participant/',
+            text: 'https://bourgineo-stack.github.io/Eco-quiz-participant/',
             width: 150,
             height: 150,
             colorDark: "#D2007A",
