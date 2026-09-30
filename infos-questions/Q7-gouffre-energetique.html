@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Q3 - Le gouffre énergétique</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #1a1030;
+    color: white;
+    padding: 2rem;
+    margin: 0;
+  }
+
+  .main-block { max-width: 680px; margin: 0 auto; }
+
+  /* Chiffre choc */
+  .choc {
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    background: rgba(210,0,122,0.12);
+    border: 1px solid rgba(210,0,122,0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.55;
+  }
+  .choc strong { color: #D2007A; font-size: 1.25rem; }
+  .choc .sub { font-size: 0.88rem; opacity: 0.75; margin-top: 0.3rem; }
+
+  /* Barres répartition */
+  .repartition { margin-bottom: 1.2rem; }
+  .rep-row { margin-bottom: 0.6rem; }
+  .rep-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 0.25rem;
+  }
+  .bar-track {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    height: 30px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+  .rep-note {
+    font-size: 0.78rem;
+    opacity: 0.6;
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+
+  /* Montants par énergie */
+  .energies-title {
+    font-weight: 800;
+    font-size: 0.92rem;
+    margin-bottom: 0.7rem;
+    opacity: 0.9;
+  }
+  .energies-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+  }
+  .energie-card {
+    border-radius: 12px;
+    padding: 0.8rem 0.9rem;
+    font-size: 0.88rem;
+  }
+  .energie-card.fioul { background: rgba(229,57,53,0.1); border: 1px solid rgba(229,57,53,0.3); }
+  .energie-card.gaz   { background: rgba(255,167,38,0.1); border: 1px solid rgba(255,167,38,0.3); }
+  .energie-card.elec  { background: rgba(30,136,229,0.1); border: 1px solid rgba(30,136,229,0.3); }
+  .energie-card.pac   { background: rgba(67,160,71,0.1);  border: 1px solid rgba(67,160,71,0.3); }
+  .energie-card .ec-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .energie-card .ec-icon  { font-size: 1.2rem; }
+  .energie-card .ec-name  { font-weight: 800; font-size: 0.9rem; }
+  .energie-card.fioul .ec-name { color: #EF9A9A; }
+  .energie-card.gaz   .ec-name { color: #FFD54F; }
+  .energie-card.elec  .ec-name { color: #90CAF9; }
+  .energie-card.pac   .ec-name { color: #81C784; }
+  .energie-card .ec-value {
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 0.2rem;
+  }
+  .energie-card.fioul .ec-value { color: #EF9A9A; }
+  .energie-card.gaz   .ec-value { color: #FFD54F; }
+  .energie-card.elec  .ec-value { color: #90CAF9; }
+  .energie-card.pac   .ec-value { color: #81C784; }
+  .energie-card .ec-sub { font-size: 0.75rem; opacity: 0.7; line-height: 1.3; }
+
+  /* Santé */
+  .sante-block {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .sante-title { font-weight: 800; font-size: 0.95rem; margin-bottom: 0.7rem; }
+  .sante-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .sante-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .sante-row .sr-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .sante-row .sr-text { flex: 1; }
+  .sante-row .sr-text strong { display: block; font-weight: 800; margin-bottom: 0.1rem; }
+
+  /* Teaser */
+  .teaser {
+    background: rgba(210,0,122,0.1);
+    border: 1px solid rgba(210,0,122,0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+  .teaser strong { color: #D2007A; }
+
+  /* Takeaway */
+  .takeaway {
+    border-left: 4px solid #D2007A;
+    background: rgba(210,0,122,0.08);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Sources */
+  .sources {
+    padding: 0.6rem 0.9rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    line-height: 1.6;
+    margin-bottom: 0.3rem;
+  }
+  .sources strong { opacity: 1; color: rgba(255,255,255,0.7); }
+
+  /* Bouton + panneau */
+  .btn-more {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.65rem 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+  .btn-more:hover { background: rgba(210,0,122,0.15); border-color: #D2007A; color: white; }
+
+  .detail-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  .detail-panel.open { max-height: 800px; opacity: 1; }
+  .detail-inner {
+    margin-top: 0.8rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .detail-inner h4 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.9rem;
+  }
+  .objection {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .objection .q { font-style: italic; opacity: 0.7; margin-bottom: 0.35rem; }
+  .objection .r { font-weight: 700; color: #D2007A; }
+
+  /* Script */
+  .script-block {
+    max-width: 680px;
+    margin: 2.5rem auto 0;
+    background: rgba(255,193,7,0.06);
+    border: 1px dashed rgba(255,193,7,0.35);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+  }
+  .script-block h4 {
+    color: #FFD54F;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+  .script-line {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: flex-start;
+  }
+  .timing {
+    background: rgba(255,193,7,0.15);
+    color: #FFD54F;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+  .script-text { font-size: 0.93rem; line-height: 1.55; }
+  .script-text em { color: #D2007A; font-style: normal; font-weight: 800; }
+  .script-text .aside { display: block; margin-top: 0.25rem; opacity: 0.45; font-size: 0.82rem; }
+  .script-source {
+    display: inline-block;
+    background: rgba(255,193,7,0.12);
+    color: #FFD54F;
+    border-radius: 6px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.3rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BLOC PRINCIPAL - à injecter dans info-body de Q7
+============================================================ -->
+<div class="main-block">
+
+  <!-- Chiffre choc -->
+  <div class="choc">
+    Dans un logement, <strong>66% de la facture énergie</strong> part dans le chauffage.<br>
+    Les appareils électriques que vous éteignez consciencieusement ? <strong>23% seulement.</strong><br>
+    <span class="sub">On agit souvent au bon endroit - mais pas au bon poste.</span>
+  </div>
+
+  <!-- Répartition barres -->
+  <div class="repartition">
+    <div class="rep-row">
+      <div class="rep-header">
+        <span>🔥 Chauffage</span>
+        <span style="color:#E53935;">66%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:66%; background:linear-gradient(90deg,#E53935,#C62828);">Le poste n°1 - et de loin</div>
+      </div>
+    </div>
+    <div class="rep-row">
+      <div class="rep-header">
+        <span>⚡ Appareils électriques</span>
+        <span style="color:#42A5F5;">23%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:23%; background:linear-gradient(90deg,#42A5F5,#1E88E5);"></div>
+      </div>
+      <div class="rep-note">Lave-linge, lave-vaisselle, frigo, éclairage, veilles... Les gros consommateurs chauffent de l'eau.</div>
+    </div>
+    <div class="rep-row">
+      <div class="rep-header">
+        <span>🚿 Eau chaude sanitaire</span>
+        <span style="color:#FFA726;">11%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:11%; background:linear-gradient(90deg,#FFA726,#FF7043);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Montants par type d'énergie -->
+  <div class="energies-title">💶 Ce que ça représente concrètement (chauffage seul, ~90m²) :</div>
+  <div class="energies-grid">
+
+    <div class="energie-card fioul">
+      <div class="ec-header">
+        <span class="ec-icon">🛢️</span>
+        <span class="ec-name">Fioul</span>
+      </div>
+      <div class="ec-value">2 000–2 500 €/an</div>
+      <div class="ec-sub">Le plus cher · Le plus émetteur<br>En forte baisse d'usage</div>
+    </div>
+
+    <div class="energie-card gaz">
+      <div class="ec-header">
+        <span class="ec-icon">🔥</span>
+        <span class="ec-name">Gaz naturel</span>
+      </div>
+      <div class="ec-value">1 200–1 800 €/an</div>
+      <div class="ec-sub">Très variable depuis 2022<br>~50% des logements FR</div>
+    </div>
+
+    <div class="energie-card elec">
+      <div class="ec-header">
+        <span class="ec-icon">⚡</span>
+        <span class="ec-name">Électrique direct</span>
+      </div>
+      <div class="ec-value">1 500–2 000 €/an</div>
+      <div class="ec-sub">Convecteurs, panneaux rayonnants<br>Cher mais CO₂ faible (nucléaire FR)</div>
+    </div>
+
+    <div class="energie-card pac">
+      <div class="ec-header">
+        <span class="ec-icon">♻️</span>
+        <span class="ec-name">Pompe à chaleur</span>
+      </div>
+      <div class="ec-value">500–800 €/an</div>
+      <div class="ec-sub">3 à 4× moins cher que l'élec direct<br>Même confort · Même CO₂ faible</div>
+    </div>
+
+  </div>
+
+  <!-- Angle santé -->
+  <div class="sante-block">
+    <div class="sante-title">🏥 Ce que la surchauffe fait à votre corps</div>
+
+    <div class="sante-row">
+      <span class="sr-icon">💧</span>
+      <div class="sr-text">
+        <strong>Air sec = muqueuses agressées</strong>
+        Le chauffage réduit l'humidité de l'air intérieur. Les muqueuses nasales s'assèchent - première ligne de défense contre les virus. Un air trop sec favorise les infections respiratoires hivernales.
+      </div>
+    </div>
+
+    <div class="sante-row">
+      <span class="sr-icon">🌡️</span>
+      <div class="sr-text">
+        <strong>Grand écart intérieur/extérieur = fatigue de l'organisme</strong>
+        Passer de 23°C intérieur à 0°C dehors, plusieurs fois par jour - le corps doit réguler sa température à chaque transition. Les médecins observent que cet effort répété fragilise l'immunité et augmente la fatigue hivernale. À 19°C, l'écart est réduit, le corps travaille moins.
+      </div>
+    </div>
+
+    <div class="sante-row">
+      <span class="sr-icon">😴</span>
+      <div class="sr-text">
+        <strong>Chambre surchauffée = mauvais sommeil</strong>
+        Le corps doit baisser sa température centrale pour entrer en sommeil profond. Une chambre à 16-18°C favorise cet abaissement naturellement. Au-delà de 19°C, le sommeil est moins réparateur.
+        <span style="font-size:0.8rem; opacity:0.6; display:block; margin-top:0.2rem;">Source : études en médecine du sommeil, INSERM</span>
+      </div>
+    </div>
+
+  </div>
+
+  
+  <!-- Takeaway -->
+  <div class="takeaway">
+    <strong>💡 À retenir :</strong> Le chauffage c'est les 2/3 de votre facture énergie. C'est là que se jouent les économies - et la qualité de l'air que vous respirez. CO₂ = énergie = argent : nulle part ailleurs c'est aussi vrai que dans votre logement.
+  </div>
+
+  <!-- Sources -->
+  <div class="sources">
+    <strong>Sources :</strong>
+    ADEME - Chiffres clés du bâtiment (2023) ·
+    SDES - Enquête sur la consommation d'énergie dans les logements ·
+    ANSES - Qualité de l'air intérieur et santé ·
+    INSERM - Médecine du sommeil et température
+  </div>
+
+  <!-- Bouton détail -->
+  <button class="btn-more" onclick="toggleDetail(this)">
+    💬 Réponses aux questions fréquentes <span id="arrow">▼</span>
+</button>
+
+  <!-- Panneau détail -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-inner">
+      <h4>Objections fréquentes</h4>
+
+      <div class="objection">
+        <div class="q">« J'ai une bonne isolation, le chauffage me coûte rien. »</div>
+        <div class="r">Bonne isolation = moins de pertes, donc moins de chauffage nécessaire. Mais le chauffage reste le poste n°1 même dans un logement bien isolé - juste avec des montants plus faibles. Et les économies liées à une baisse d'1°C sont encore plus importantes dans un logement performant (jusqu'à 15% par degré).</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« La PAC c'est bien mais ça coûte cher à installer. »</div>
+        <div class="r">Vrai - entre 8 000 et 15 000 € selon les modèles. Mais avec les aides MaPrimeRénov' et l'économie annuelle de 1 000 à 1 500 € vs électrique direct ou fioul, le retour sur investissement est de 6 à 10 ans. Et la valeur du logement augmente.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« En France l'électricité c'est nucléaire, donc c'est propre. »</div>
+        <div class="r">Pour le CO₂, oui - l'électricité française est parmi les moins carbonées d'Europe (~60 gCO₂/kWh vs ~400 en Allemagne). Mais le prix reste élevé, et la consommation d'énergie reste de l'énergie consommée. L'argument CO₂ est faible pour l'électrique français - l'argument économique reste entier.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
