@@ -8,16 +8,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --divia-magenta: #D2007A;
-            --divia-magenta-dark: #A80062;
-            --divia-purple: #2D1B4E;
-            --team-blue: #1E88E5;
-            --team-blue-glow: rgba(30, 136, 229, 0.4);
-            --team-red: #E53935;
-            --team-red-glow: rgba(229, 57, 53, 0.4);
-            --success: #43A047;
-            --warning: #FFA726;
-        }
+    --brand:        #EC4899;
+    --brand-rgb:    236, 72, 153;
+    --brand-dark:   #DB2777;
+    --brand-light:  #FCE7F3;
+
+    --accent2:      #F59E0B;
+    --accent2-rgb:  245, 158, 11;
+
+    --bg-deep:      #1E1533;
+    --bg-deep-2:    #150F26;
+
+    --team-blue:      #3B82F6;
+    --team-blue-rgb:  59, 130, 246;
+    --team-blue-dark: #1D4ED8;
+    --team-red:       #EF4444;
+    --team-red-rgb:   239, 68, 68;
+    --team-red-dark:  #B91C1C;
+
+    --success:    #14B8A6;
+    --warning:    #FBBF24;
+    --discussion: #8B5CF6;
+
+    --gray-light: #F6F2F2;
+    --gray-dark:  #1F2937;
+
+    --divia-magenta:       var(--brand);
+    --divia-magenta-dark:  var(--brand-dark);
+    --divia-magenta-light: var(--brand-light);
+    --divia-purple:        var(--bg-deep);
+}
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
