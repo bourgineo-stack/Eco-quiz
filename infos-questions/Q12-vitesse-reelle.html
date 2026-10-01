@@ -1,1 +1,576 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Q - La vitesse réelle de la voiture</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #1a1030;
+    color: white;
+    padding: 2rem;
+    margin: 0;
+  }
 
+  .main-block { max-width: 680px; margin: 0 auto; }
+
+  /* Chiffre choc */
+  .choc {
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    background: rgba(210,0,122,0.12);
+    border: 1px solid rgba(210,0,122,0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.55;
+  }
+  .choc strong { color: #D2007A; font-size: 1.25rem; }
+  .choc .sub { font-size: 0.88rem; opacity: 0.75; margin-top: 0.3rem; }
+
+  /* Le temps donné à la voiture */
+  .vg-time-title {
+    font-weight: 800;
+    font-size: 0.92rem;
+    margin-bottom: 0.7rem;
+    opacity: 0.9;
+  }
+  .vg-time {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin-bottom: 0.4rem;
+  }
+  .vg-tcard {
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+    padding: 0.8rem 0.9rem;
+    border-radius: 12px;
+    border: 2px solid;
+  }
+  .vg-tcard.volant  { border-color: #FFA726; background: rgba(255,167,38,0.1); }
+  .vg-tcard.travail { border-color: #E53935; background: rgba(229,57,53,0.1); }
+  .vg-tcard.total   { border-color: #D2007A; background: rgba(210,0,122,0.12); }
+  .vg-tcard .tc-icon  { font-size: 1.6rem; margin-bottom: 0.2rem; }
+  .vg-tcard .tc-label { font-size: 0.78rem; font-weight: 700; opacity: 0.8; }
+  .vg-tcard .tc-value { font-size: 1.45rem; font-weight: 900; line-height: 1.15; margin-top: 0.2rem; }
+  .vg-tcard.volant  .tc-value { color: #FFA726; }
+  .vg-tcard.travail .tc-value { color: #EF9A9A; }
+  .vg-tcard.total   .tc-value { color: #D2007A; }
+  .vg-tcard .tc-sub { font-size: 0.75rem; opacity: 0.6; margin-top: 0.15rem; }
+  .vg-hyp {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+  }
+
+  /* Calcul interactif sans JavaScript (fonctionne une fois injecté) */
+  .vg-calc {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .vg-calc-title {
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 0.8rem;
+  }
+  .vg-radio { position: absolute; opacity: 0; pointer-events: none; }
+  .vg-btns {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .vg-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: 0.7rem 0.5rem;
+    background: rgba(255,255,255,0.07);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+  .vg-btn:hover { border-color: #D2007A; background: rgba(210,0,122,0.12); }
+  .vg-btn .sub-label { display: block; font-size: 0.72rem; font-weight: 600; opacity: 0.6; margin-top: 0.1rem; }
+
+  #vg-s1:checked ~ .vg-btns label[for="vg-s1"],
+  #vg-s2:checked ~ .vg-btns label[for="vg-s2"],
+  #vg-s3:checked ~ .vg-btns label[for="vg-s3"],
+  #vg-s4:checked ~ .vg-btns label[for="vg-s4"] {
+    border-color: #D2007A;
+    background: rgba(210,0,122,0.2);
+  }
+
+  .vg-res { display: none; gap: 0.7rem; flex-wrap: wrap; }
+  #vg-s1:checked ~ .vg-results .vg-r1,
+  #vg-s2:checked ~ .vg-results .vg-r2,
+  #vg-s3:checked ~ .vg-results .vg-r3,
+  #vg-s4:checked ~ .vg-results .vg-r4 { display: flex; }
+
+  .vg-rcard {
+    flex: 1;
+    min-width: 130px;
+    text-align: center;
+    padding: 0.75rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .vg-rcard .rc-label { font-size: 0.78rem; font-weight: 700; opacity: 0.8; margin-bottom: 0.25rem; }
+  .vg-rcard .rc-value { font-size: 1.55rem; font-weight: 900; line-height: 1.1; }
+  .vg-rcard .rc-sub   { font-size: 0.75rem; opacity: 0.6; margin-top: 0.2rem; }
+  .vg-rcard.speed .rc-value { color: #D2007A; }
+  .vg-rcard.time  .rc-value { color: #FFD54F; }
+  .vg-rcard.max   .rc-value { color: #26C6DA; }
+
+  .vg-velo {
+    margin-top: 0.8rem;
+    background: rgba(67,160,71,0.12);
+    border: 1px solid rgba(67,160,71,0.35);
+    border-radius: 20px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #81C784;
+    text-align: center;
+  }
+
+  /* Le plafond */
+  .vg-plafond {
+    text-align: center;
+    background: rgba(38,198,218,0.08);
+    border: 1px solid rgba(38,198,218,0.3);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+  .vg-plafond .pl-rule { font-weight: 800; font-size: 1rem; margin-bottom: 0.3rem; }
+  .vg-plafond strong { color: #26C6DA; }
+
+  /* Le paradoxe de l'autoroute */
+  .vg-auto {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .vg-auto-title { font-weight: 800; margin-bottom: 0.7rem; font-size: 0.92rem; }
+  .vg-match {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+  }
+  .vg-mcard {
+    flex: 1;
+    min-width: 130px;
+    text-align: center;
+    padding: 0.7rem 0.8rem;
+    border-radius: 12px;
+    border: 2px solid;
+  }
+  .vg-mcard.temps  { border-color: #43A047; background: rgba(67,160,71,0.1); }
+  .vg-mcard.argent { border-color: #E53935; background: rgba(229,57,53,0.1); }
+  .vg-mcard .mc-label { font-size: 0.78rem; font-weight: 700; opacity: 0.8; }
+  .vg-mcard .mc-value { font-size: 1.4rem; font-weight: 900; line-height: 1.15; margin-top: 0.15rem; }
+  .vg-mcard.temps  .mc-value { color: #81C784; }
+  .vg-mcard.argent .mc-value { color: #EF9A9A; }
+  .vg-mcard .mc-sub { font-size: 0.75rem; opacity: 0.6; margin-top: 0.15rem; }
+  .vg-vs {
+    font-weight: 900;
+    color: #D2007A;
+    background: rgba(210,0,122,0.15);
+    border: 1px solid rgba(210,0,122,0.35);
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .vg-verdict {
+    text-align: center;
+    font-weight: 700;
+    background: rgba(210,0,122,0.1);
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+  }
+  .vg-verdict strong { color: #D2007A; }
+  .vg-secu {
+    margin-top: 0.7rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  /* Takeaway */
+  .takeaway {
+    border-left: 4px solid #D2007A;
+    background: rgba(210,0,122,0.08);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Sources */
+  .sources {
+    padding: 0.6rem 0.9rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    line-height: 1.6;
+    margin-bottom: 0.3rem;
+  }
+  .sources strong { opacity: 1; color: rgba(255,255,255,0.7); }
+
+  /* Bouton + panneau */
+  .btn-more {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.65rem 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+  .btn-more:hover { background: rgba(210,0,122,0.15); border-color: #D2007A; color: white; }
+
+  .detail-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  .detail-panel.open { max-height: 1600px; opacity: 1; }
+  .detail-inner {
+    margin-top: 0.8rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .detail-inner h4 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.9rem;
+  }
+  .objection {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .objection .q { font-style: italic; opacity: 0.7; margin-bottom: 0.35rem; }
+  .objection .r { font-weight: 700; color: #D2007A; }
+
+  /* Script */
+  .script-block {
+    max-width: 680px;
+    margin: 2.5rem auto 0;
+    background: rgba(255,193,7,0.06);
+    border: 1px dashed rgba(255,193,7,0.35);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+  }
+  .script-block h4 {
+    color: #FFD54F;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+  .script-line {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: flex-start;
+  }
+  .timing {
+    background: rgba(255,193,7,0.15);
+    color: #FFD54F;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+  .script-text { font-size: 0.93rem; line-height: 1.55; }
+  .script-text em { color: #D2007A; font-style: normal; font-weight: 800; }
+  .script-text .aside { display: block; margin-top: 0.25rem; opacity: 0.45; font-size: 0.82rem; }
+
+  @media (max-width: 520px) {
+    body { padding: 1rem; }
+    .vg-vs { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BLOC PRINCIPAL - à injecter dans info-body
+============================================================ -->
+<div class="main-block">
+
+  <!-- Chiffre choc -->
+  <div class="choc">
+    En comptant le temps passé à travailler pour la payer,<br>
+    une voiture roule en moyenne à <strong>environ 20 km/h.</strong><br>
+    <span class="sub">La vitesse d'un vélo électrique. Et on passe plus de temps à travailler pour elle qu'à la conduire.</span>
+  </div>
+
+  <!-- Le temps donné à la voiture -->
+  <div class="vg-time-title">⏳ Le temps qu'on donne vraiment à sa voiture, chaque jour :</div>
+  <div class="vg-time">
+    <div class="vg-tcard volant">
+      <div class="tc-icon">🚗</div>
+      <div class="tc-label">Au volant</div>
+      <div class="tc-value">45 min</div>
+      <div class="tc-sub">270 h par an</div>
+    </div>
+    <div class="vg-tcard travail">
+      <div class="tc-icon">💼</div>
+      <div class="tc-label">Au travail pour la payer</div>
+      <div class="tc-value">55 min</div>
+      <div class="tc-sub">340 h par an</div>
+    </div>
+    <div class="vg-tcard total">
+      <div class="tc-icon">🐢</div>
+      <div class="tc-label">Vitesse réelle</div>
+      <div class="tc-value">20 km/h</div>
+      <div class="tc-sub">12 000 km ÷ 610 h</div>
+    </div>
+  </div>
+  <div class="vg-hyp">Hypothèses : 12 000 km par an, 0,40 € par km tout compris, 45 km/h de moyenne au volant, 14 € net de l'heure.</div>
+
+  <!-- Calcul selon le salaire (CSS seul, pas de JavaScript) -->
+  <div class="vg-calc">
+    <div class="vg-calc-title">🧮 Et selon votre salaire horaire net ?</div>
+
+    <input type="radio" name="vg-sal" id="vg-s1" class="vg-radio">
+    <input type="radio" name="vg-sal" id="vg-s2" class="vg-radio" checked>
+    <input type="radio" name="vg-sal" id="vg-s3" class="vg-radio">
+    <input type="radio" name="vg-sal" id="vg-s4" class="vg-radio">
+
+    <div class="vg-btns">
+      <label for="vg-s1" class="vg-btn">9,5 €<span class="sub-label">≈ SMIC</span></label>
+      <label for="vg-s2" class="vg-btn">14 €<span class="sub-label">≈ médian</span></label>
+      <label for="vg-s3" class="vg-btn">20 €<span class="sub-label">de l'heure</span></label>
+      <label for="vg-s4" class="vg-btn">25 €<span class="sub-label">de l'heure</span></label>
+    </div>
+
+    <div class="vg-results">
+      <div class="vg-res vg-r1">
+        <div class="vg-rcard speed"><div class="rc-label">🐢 Vitesse réelle</div><div class="rc-value">15 km/h</div><div class="rc-sub">un vélo classique</div></div>
+        <div class="vg-rcard time"><div class="rc-label">⏳ Temps par jour</div><div class="rc-value">2 h 07</div><div class="rc-sub">volant + travail</div></div>
+        <div class="vg-rcard max"><div class="rc-label">🚀 Plafond absolu</div><div class="rc-value">24 km/h</div><div class="rc-sub">même à vitesse infinie</div></div>
+      </div>
+      <div class="vg-res vg-r2">
+        <div class="vg-rcard speed"><div class="rc-label">🐢 Vitesse réelle</div><div class="rc-value">20 km/h</div><div class="rc-sub">un vélo électrique</div></div>
+        <div class="vg-rcard time"><div class="rc-label">⏳ Temps par jour</div><div class="rc-value">1 h 40</div><div class="rc-sub">volant + travail</div></div>
+        <div class="vg-rcard max"><div class="rc-label">🚀 Plafond absolu</div><div class="rc-value">35 km/h</div><div class="rc-sub">même à vitesse infinie</div></div>
+      </div>
+      <div class="vg-res vg-r3">
+        <div class="vg-rcard speed"><div class="rc-label">🐢 Vitesse réelle</div><div class="rc-value">24 km/h</div><div class="rc-sub">un vélo électrique</div></div>
+        <div class="vg-rcard time"><div class="rc-label">⏳ Temps par jour</div><div class="rc-value">1 h 23</div><div class="rc-sub">volant + travail</div></div>
+        <div class="vg-rcard max"><div class="rc-label">🚀 Plafond absolu</div><div class="rc-value">50 km/h</div><div class="rc-sub">même à vitesse infinie</div></div>
+      </div>
+      <div class="vg-res vg-r4">
+        <div class="vg-rcard speed"><div class="rc-label">🐢 Vitesse réelle</div><div class="rc-value">26 km/h</div><div class="rc-sub">un vélo électrique rapide</div></div>
+        <div class="vg-rcard time"><div class="rc-label">⏳ Temps par jour</div><div class="rc-value">1 h 15</div><div class="rc-sub">volant + travail</div></div>
+        <div class="vg-rcard max"><div class="rc-label">🚀 Plafond absolu</div><div class="rc-value">62 km/h</div><div class="rc-sub">même à vitesse infinie</div></div>
+      </div>
+    </div>
+
+    <div class="vg-velo">🚲 Repères : vélo classique ~15 km/h en ville, vélo électrique ~20 à 25 km/h</div>
+  </div>
+
+  <!-- Le plafond -->
+  <div class="vg-plafond">
+    <div class="pl-rule">Votre voiture ne roulera jamais plus vite que<br><strong>votre salaire horaire ÷ son coût au km.</strong></div>
+    14 € ÷ 0,40 € = <strong>35 km/h maximum</strong>, même avec une voiture qui irait infiniment vite.<br>
+    <span style="opacity:0.75;">Rouler plus vite ne fait presque rien gagner : le temps passé à la payer ne bouge pas.</span>
+  </div>
+
+  <!-- Le paradoxe de l'autoroute -->
+  <div class="vg-auto">
+    <div class="vg-auto-title">🛣️ Sur autoroute : 130 au lieu de 110, sur 100 km</div>
+    <div class="vg-match">
+      <div class="vg-mcard temps">
+        <div class="mc-label">⏱️ Temps gagné</div>
+        <div class="mc-value">~8 min</div>
+        <div class="mc-sub">sur 100 km</div>
+      </div>
+      <div class="vg-vs">VS</div>
+      <div class="vg-mcard argent">
+        <div class="mc-label">⛽ Carburant en plus</div>
+        <div class="mc-value">~2,50 €</div>
+        <div class="mc-sub">environ +20 %</div>
+      </div>
+    </div>
+    <div class="vg-verdict">
+      Ces 8 minutes, vous les payez <strong>environ 18 € de l'heure.</strong><br>
+      Si vous gagnez moins que ça, vous achetez votre temps <strong>plus cher que vous ne le vendez.</strong>
+    </div>
+    <div class="vg-secu">❤️ Bonus sécurité : l'énergie d'un choc augmente avec le carré de la vitesse, environ 40 % de plus à 130 qu'à 110.</div>
+  </div>
+
+  <!-- Takeaway -->
+  <div class="takeaway">
+    <strong>💡 À retenir :</strong> à 130 au lieu de 110, on achète du temps à environ 18 € de l'heure.<br>
+    <span style="opacity:0.85;">Pour la plupart d'entre nous, lever le pied, c'est arriver plus tôt une fois tout compté.</span>
+  </div>
+
+  <!-- Sources -->
+  <div class="sources">
+    <strong>Sources :</strong>
+    Ivan Illich, Énergie et équité (1973), annexe de Jean-Pierre Dupuy sur la vitesse généralisée en France ·
+    The Conversation (2026), actualisation de la vitesse généralisée de la voiture et du vélo ·
+    Réponse ministérielle à la question écrite n° 8339 (2023) : environ 20 % de carburant économisé à 110 au lieu de 130 ·
+    Hypothèses VoltFace : 12 000 km/an, 0,40 €/km, 45 km/h de moyenne, carburant à 1,80 €/L, 7 L/100 km à 130
+  </div>
+
+  <!-- Bouton expandable -->
+  <button class="btn-more" onclick="toggleDetail(this)">
+    💬 Réponses aux questions fréquentes <span>▼</span>
+  </button>
+
+  <!-- Panneau détail -->
+  <div class="detail-panel">
+    <div class="detail-inner">
+      <h4>Pour aller plus loin</h4>
+
+      <div class="objection">
+        <div class="q">« Je n'ai pas le choix, je commence à 5 h du matin. »</div>
+        <div class="r">Personne ne vous demande de vendre votre voiture. Le levier gratuit, c'est la vitesse sur autoroute. Les autres jouent sur le coût au km : voiture plus petite, gardée plus longtemps, covoiturage.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« Ma voiture est payée, elle ne me coûte plus rien. »</div>
+        <div class="r">La décote, l'assurance, l'entretien et le carburant continuent tant qu'elle roule. C'est ce que couvrent les 0,40 € par km.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« Mon temps libre, ce n'est pas du temps de travail. »</div>
+        <div class="r">C'est justement le point : chaque heure travaillée pour payer la voiture est une heure qui n'est pas libre.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« Illich disait 6 km/h, plus lent qu'à vélo ! »</div>
+        <div class="r">C'était vrai pour un Américain en 1973 : voitures chères, salaires bas, beaucoup de bouchons. Aujourd'hui, la voiture est redevenue plus rapide qu'un vélo classique, mais elle reste au niveau d'un vélo électrique.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« Comment c'est calculé ? »</div>
+        <div class="r">Kilomètres par an ÷ (heures au volant + heures de travail pour payer la voiture). Pour votre cas : kilomètres × 0,40 € ÷ votre salaire horaire net = heures de travail par an. À faire de tête, pour soi.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     SCRIPT ANIMATEUR (hors session)
+============================================================ -->
+<div class="script-block">
+  <h4>🎤 Script animateur</h4>
+
+  <div class="script-line">
+    <span class="timing">0–20 s</span>
+    <div class="script-text">
+      <em>« Environ 20 km/h. La vitesse d'un vélo électrique. »</em>
+      <span class="aside">→ Si quelqu'un a répondu 6 km/h : bravo, c'est le chiffre d'Illich en 1973. Il n'est plus vrai aujourd'hui (voir questions fréquentes).</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">20–50 s</span>
+    <div class="script-text">
+      <em>« Votre voiture vous prend 1 h 40 par jour : 45 minutes au volant, presque une heure au travail pour la payer. »</em>
+      <span class="aside">→ Montrer les trois cartes. Laisser chacun choisir son salaire dans le calcul, sans jamais demander de chiffre à voix haute.</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">50–75 s</span>
+    <div class="script-text">
+      <em>« Et même une voiture qui irait infiniment vite ne dépasserait pas 35 km/h : le temps passé à la payer ne bouge pas. »</em>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">75–105 s</span>
+    <div class="script-text">
+      <em>« Sur autoroute, à 130 au lieu de 110, vous gagnez 8 minutes et vous payez 2,50 € de carburant en plus. Ça fait 18 € de l'heure. Qui ici gagne plus de 18 € net de l'heure ? »</em>
+      <span class="aside">→ Question rhétorique : ne pas attendre de réponse. Avec des conducteurs pros, les laisser expliquer l'éco-conduite.</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">105–120 s</span>
+    <div class="script-text">
+      <em>« Si vous gagnez moins que ça, vous achetez votre temps plus cher que vous ne le vendez. »</em>
+      <span class="aside">→ Phrase de fin. Ne pas commenter après.</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleDetail(btn) {
+  const panel = btn.nextElementSibling;
+  if (!panel || !panel.classList.contains('detail-panel')) return;
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  const arrow = btn.querySelector('span');
+  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+}
+</script>
+
+</body>
+</html>
