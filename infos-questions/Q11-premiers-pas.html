@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Q - Les premiers pas valent de l'or</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #1a1030;
+    color: white;
+    padding: 2rem;
+    margin: 0;
+  }
+
+  .main-block { max-width: 680px; margin: 0 auto; }
+
+  /* Chiffre choc */
+  .choc {
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    background: rgba(210,0,122,0.12);
+    border: 1px solid rgba(210,0,122,0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.55;
+  }
+  .choc strong { color: #D2007A; font-size: 1.25rem; }
+  .choc .sub { font-size: 0.88rem; opacity: 0.75; margin-top: 0.3rem; }
+
+  /* Courbe des gains */
+  .pas-title {
+    font-weight: 800;
+    font-size: 0.92rem;
+    margin-bottom: 0.7rem;
+    opacity: 0.9;
+  }
+  .pas-curve { margin-bottom: 0.5rem; }
+  .pas-row { margin-bottom: 0.6rem; }
+  .pas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+    gap: 0.5rem;
+  }
+  .pas-header .pas-walk { font-size: 0.78rem; opacity: 0.6; font-weight: 600; }
+  .pas-track {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    height: 30px;
+    overflow: hidden;
+  }
+  .pas-fill {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .pas-fill.f1 { width: 75%; background: linear-gradient(90deg,#43A047,#2E7D32); }
+  .pas-fill.f2 { width: 98%; background: linear-gradient(90deg,#66BB6A,#43A047); }
+  .pas-fill.f3 { width: 100%; background: linear-gradient(90deg,#81C784,#66BB6A); }
+  .pas-gain {
+    font-size: 0.78rem;
+    font-style: italic;
+    opacity: 0.65;
+    margin-top: 0.2rem;
+  }
+  .pas-gain strong { color: #81C784; font-style: normal; opacity: 1; }
+  .pas-note {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+  }
+
+  /* Angle santé */
+  .sante-block {
+    background: rgba(67,160,71,0.08);
+    border: 1px solid rgba(67,160,71,0.25);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.2rem;
+  }
+  .sante-title {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: #81C784;
+    margin-bottom: 0.6rem;
+  }
+  .sante-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  .sante-card { text-align: center; }
+  .sante-card .sc-value { font-size: 1.5rem; font-weight: 900; color: #81C784; line-height: 1.1; }
+  .sante-card .sc-label { font-size: 0.8rem; font-weight: 700; opacity: 0.8; line-height: 1.3; margin-top: 0.2rem; }
+
+  /* Où trouver 20 minutes */
+  .ou-block {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .ou-title { font-weight: 800; margin-bottom: 0.55rem; font-size: 0.92rem; }
+  .ou-icons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.7rem;
+  }
+  .ou-icons .oi {
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .ou-money {
+    background: rgba(255,193,7,0.08);
+    border: 1px solid rgba(255,193,7,0.25);
+    border-radius: 10px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.88rem;
+  }
+  .ou-money strong { color: #FFD54F; }
+
+  /* Takeaway */
+  .takeaway {
+    border-left: 4px solid #D2007A;
+    background: rgba(210,0,122,0.08);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Sources */
+  .sources {
+    padding: 0.6rem 0.9rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    line-height: 1.6;
+    margin-bottom: 0.3rem;
+  }
+  .sources strong { opacity: 1; color: rgba(255,255,255,0.7); }
+
+  /* Bouton + panneau */
+  .btn-more {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.65rem 1rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.75);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+  .btn-more:hover { background: rgba(210,0,122,0.15); border-color: #D2007A; color: white; }
+
+  .detail-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+  }
+  .detail-panel.open { max-height: 1200px; opacity: 1; }
+  .detail-inner {
+    margin-top: 0.8rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .detail-inner h4 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 0.9rem;
+  }
+  .objection {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .objection .q { font-style: italic; opacity: 0.7; margin-bottom: 0.35rem; }
+  .objection .r { font-weight: 700; color: #D2007A; }
+
+  /* Script */
+  .script-block {
+    max-width: 680px;
+    margin: 2.5rem auto 0;
+    background: rgba(255,193,7,0.06);
+    border: 1px dashed rgba(255,193,7,0.35);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+  }
+  .script-block h4 {
+    color: #FFD54F;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+  .script-line {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: flex-start;
+  }
+  .timing {
+    background: rgba(255,193,7,0.15);
+    color: #FFD54F;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+  .script-text { font-size: 0.93rem; line-height: 1.55; }
+  .script-text em { color: #D2007A; font-style: normal; font-weight: 800; }
+  .script-text .aside { display: block; margin-top: 0.25rem; opacity: 0.45; font-size: 0.82rem; }
+
+  @media (max-width: 520px) {
+    body { padding: 1rem; }
+    .sante-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BLOC PRINCIPAL - à injecter dans info-body
+============================================================ -->
+<div class="main-block">
+
+  <!-- Chiffre choc -->
+  <div class="choc">
+    Passer de 2 000 à 4 000 pas par jour : <strong>-36 % de risque de décès.</strong><br>
+    Soit environ <strong>20 minutes de marche</strong> en plus.<br>
+    <span class="sub">Ce n'est pas le sportif qui gagne le plus quand il marche plus. C'est celui qui ne marchait presque pas.</span>
+  </div>
+
+  <!-- Courbe des gains -->
+  <div class="pas-title">📉 Baisse du risque de décès, par rapport à 2 000 pas par jour :</div>
+  <div class="pas-curve">
+
+    <div class="pas-row">
+      <div class="pas-header">
+        <span>🚶 4 000 pas</span>
+        <span class="pas-walk">+ ~20 min de marche</span>
+      </div>
+      <div class="pas-track"><div class="pas-fill f1">-36 %</div></div>
+      <div class="pas-gain">Les premières minutes font <strong>l'essentiel du travail</strong></div>
+    </div>
+
+    <div class="pas-row">
+      <div class="pas-header">
+        <span>🚶 7 000 pas</span>
+        <span class="pas-walk">+ ~50 min de marche</span>
+      </div>
+      <div class="pas-track"><div class="pas-fill f2">-47 %</div></div>
+      <div class="pas-gain">Encore <strong>11 points</strong> de gagnés</div>
+    </div>
+
+    <div class="pas-row">
+      <div class="pas-header">
+        <span>🏃 10 000 pas</span>
+        <span class="pas-walk">+ ~1 h 20 de marche</span>
+      </div>
+      <div class="pas-track"><div class="pas-fill f3">-48 %</div></div>
+      <div class="pas-gain">Plus qu'<strong>un seul point</strong> de mieux</div>
+    </div>
+
+  </div>
+  <div class="pas-note">Repère : environ 100 pas par minute de marche tranquille, soit 2 000 pas ≈ 1,5 km.</div>
+
+  <!-- Angle santé -->
+  <div class="sante-block">
+    <div class="sante-title">❤️ Et ce n'est pas que le cœur : à 7 000 pas par jour</div>
+    <div class="sante-grid">
+      <div class="sante-card">
+        <div class="sc-value">-25 %</div>
+        <div class="sc-label">maladies cardio-vasculaires</div>
+      </div>
+      <div class="sante-card">
+        <div class="sc-value">-38 %</div>
+        <div class="sc-label">démence</div>
+      </div>
+      <div class="sante-card">
+        <div class="sc-value">-22 %</div>
+        <div class="sc-label">symptômes dépressifs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Où trouver 20 minutes -->
+  <div class="ou-block">
+    <div class="ou-title">⏱️ Où trouver 20 minutes sans rien ajouter à son agenda ?</div>
+    <div class="ou-icons">
+      <span class="oi">🚏 Descendre un arrêt plus tôt</span>
+      <span class="oi">🥪 Marcher pendant la pause</span>
+      <span class="oi">🪜 Les escaliers</span>
+      <span class="oi">🛒 Les courses à moins de 2 km</span>
+    </div>
+    <div class="ou-money">
+      💰 Les trajets de moins de 2 km sont <strong>les plus chers en voiture</strong> : moteur froid, on consomme jusqu'à <strong>45 % de plus</strong> sur le premier kilomètre en ville. Les plus faciles à marcher sont aussi ceux qui coûtent le plus.
+    </div>
+  </div>
+
+  <!-- Takeaway -->
+  <div class="takeaway">
+    <strong>💡 À retenir :</strong> les 20 premières minutes valent plus que toutes les suivantes.<br>
+    <span style="opacity:0.85;">Pas besoin de faire du sport : il suffit de marcher un peu plus que d'habitude.</span>
+  </div>
+
+  <!-- Sources -->
+  <div class="sources">
+    <strong>Sources :</strong>
+    Ding D. et al., The Lancet Public Health, 2025 : méta-analyse de 57 études sur les pas quotidiens et la santé ·
+    ADEME : surconsommation moteur froid (premier kilomètre en ville)
+  </div>
+
+  <!-- Bouton expandable -->
+  <button class="btn-more" onclick="toggleDetail(this)">
+    💬 Réponses aux questions fréquentes <span>▼</span>
+  </button>
+
+  <!-- Panneau détail -->
+  <div class="detail-panel">
+    <div class="detail-inner">
+      <h4>Pour aller plus loin</h4>
+
+      <div class="objection">
+        <div class="q">« Je marche déjà toute la journée au travail. »</div>
+        <div class="r">Alors vous êtes sans doute déjà au-delà du seuil, et c'est une bonne nouvelle. Le gain le plus fort concerne les journées assises : bureau, conduite, écran.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« Je n'ai pas le temps. »</div>
+        <div class="r">20 minutes, ça peut être deux fois 10 minutes. Ce qui compte, c'est le total de la journée, pas une séance d'un seul bloc.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« On m'a toujours dit 10 000 pas. »</div>
+        <div class="r">Ce chiffre vient d'une campagne commerciale pour un podomètre dans les années 1960. Passer de 7 000 à 10 000 pas ne fait gagner qu'un point de plus. Si vous aimez marcher, continuez, mais ce n'est pas un seuil à atteindre.</div>
+      </div>
+
+      <div class="objection">
+        <div class="q">« C'est prouvé que marcher fait vivre plus longtemps ? »</div>
+        <div class="r">Ces études montrent une association, pas une garantie individuelle : on marche aussi moins quand on est déjà malade. Mais le résultat est cohérent sur 57 études et plusieurs pays, et l'activité physique est bénéfique sur de nombreux plans.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ============================================================
+     SCRIPT ANIMATEUR (hors session)
+============================================================ -->
+<div class="script-block">
+  <h4>🎤 Script animateur</h4>
+
+  <div class="script-line">
+    <span class="timing">0–20 s</span>
+    <div class="script-text">
+      <em>« Vingt minutes. Pas une heure de sport : vingt minutes de marche en plus. »</em>
+      <span class="aside">→ Laisser réagir. Beaucoup auront parié sur 50 min ou plus.</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">20–50 s</span>
+    <div class="script-text">
+      Montrer les barres. <em>« De 2 000 à 4 000 pas : -36 %. Ensuite ça monte encore un peu, puis presque plus. Ce n'est pas le sportif qui gagne le plus, c'est celui qui ne marchait presque pas. »</em>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">50–80 s</span>
+    <div class="script-text">
+      <em>« Où est-ce que vous trouveriez 20 minutes dans votre journée sans rien ajouter à votre agenda ? »</em>
+      <span class="aside">→ Faire parler. Ce sont leurs idées qui comptent, pas les nôtres. Compléter avec les pastilles si besoin.</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">80–105 s</span>
+    <div class="script-text">
+      <em>« Et les petits trajets en voiture, c'est justement là qu'elle consomme le plus : moteur froid, jusqu'à 45 % de plus sur le premier kilomètre. »</em>
+      <span class="aside">→ Ne pas insister : c'est un bonus, pas le message principal.</span>
+    </div>
+  </div>
+
+  <div class="script-line">
+    <span class="timing">105–120 s</span>
+    <div class="script-text">
+      <em>« Les 20 premières minutes valent plus que toutes les suivantes. »</em>
+      <span class="aside">→ Devant des patients : aucun chiffre sur le cancer, rester sur « chaque pas compte ».</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleDetail(btn) {
+  const panel = btn.nextElementSibling;
+  if (!panel || !panel.classList.contains('detail-panel')) return;
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  const arrow = btn.querySelector('span');
+  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+}
+</script>
+
+</body>
+</html>
