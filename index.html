@@ -1281,9 +1281,14 @@ async function tryFetchScores(label) {
             }, 3000);
         }
         
- } else if (quizState.phase === 'discussion') {
+  } else if (quizState.phase === 'discussion') {
         document.querySelectorAll('.option-card').forEach(c => c.classList.remove('correct', 'wrong'));
         if (state.lastPhase !== 'discussion') {
+            // Appliquer le score de la dernière question avant d'afficher la pause
+            if (state.pendingScores) {
+                applyScores(state.pendingScores);
+                state.pendingScores = null;
+            }
             const tour = getCurrentTour(state.referenceTime);
             // questionIndex est 0-based, tour est 1-based
             // absCount = nombre de questions terminées depuis le début absolu
