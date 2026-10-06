@@ -775,7 +775,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrToggle = $('qr-toggle');
     const qrPopup = $('qr-popup');
     
-            qrToggle.addEventListener('click', (e) => {
+    if (qrToggle && qrPopup) {
+        qrToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             qrPopup.classList.toggle('active');
         });
