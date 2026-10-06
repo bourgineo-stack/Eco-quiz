@@ -114,10 +114,9 @@
 
 .qr-code-popup {
     display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 0.5rem;
+    position: fixed;
+    top: 90px;
+    right: 1rem;
     background: white;
     padding: 1rem;
     border-radius: 12px;
@@ -777,17 +776,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const qrToggle = $('qr-toggle');
     const qrPopup = $('qr-popup');
     
-    if (qrToggle && qrPopup) {
-        qrToggle.addEventListener('click', (e) => {
+            qrToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             qrPopup.classList.toggle('active');
-        });
-        
-        // Fermer au clic ailleurs
-        document.addEventListener('click', (e) => {
-            if (!qrToggle.contains(e.target) && !qrPopup.contains(e.target)) {
-                qrPopup.classList.remove('active');
-            }
         });
     }
     $('info-overlay-close').addEventListener('click', () => closeOverlay());
